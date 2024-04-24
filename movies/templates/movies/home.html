@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the Movie App</h1>
+
+    <form method="get" action="{% url 'search_movies' %}">
+        <input type="text" name="q" placeholder="Search movies by title, category, or cast">
+        <button type="submit">Search</button>
+    </form>
+
+</body>
+</html>
