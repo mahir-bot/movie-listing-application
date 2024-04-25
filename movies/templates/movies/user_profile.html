@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .profile-info h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin: 4px 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .profile-details {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .favorite-movies {
+            margin-top: 30px;
+        }
+
+        .favorite-movies h3 {
+            font-size: 24px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .favorite-movies-carousel {
+            display: flex; 
+            overflow-x: auto; 
+            gap: 20px; 
+        }
+
+        .movie-card {
+            flex: 0 0 auto; 
+            width: 200px; 
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            text-align: center; 
+        }
+
+        .movie-card img {
+            max-width: 100%;
+            border-radius: 8px; 
+        }
+
+        .movie-card:hover {
+            background-color: #e0e0e0;
+        }
+
+        .movie-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .movie-card a:hover {
+            color: #0056b3;
+        }
+
+        .no-favorites {
+            font-size: 16px;
+            color: #888;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-info">
+                <h2>{{ user.username }}</h2>
+                <p>Email: {{ user.email }}</p>
+                <p>Full Name: {{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+            <div class="profile-details">
+                <p>Account created: {{ user.date_joined|date:'F Y' }}</p>
+            </div>
+        </div>
+
+        <div class="favorite-movies">
+            <h3>Favorite Movies</h3>
+            <div class="favorite-movies-carousel">
+                {% if favorite_movies.exists %}
+                    {% for favorite in favorite_movies %}
+                        <div class="movie-card">
+                            <img src="{{ favorite.movie.thumbnail.url }}" alt="{{ favorite.movie.title }} poster">
+                            <a href="{% url 'movie_detail' favorite.movie.slug %}">{{ favorite.movie.title }}</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="movie-card">No favorite movies found.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

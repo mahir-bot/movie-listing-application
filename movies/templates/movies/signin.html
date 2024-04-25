@@ -2,33 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signin</title>
-   
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signin-form {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555555;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .signin-form p {
+            text-align: center;
+            color: #333333;
+            margin-top: 15px;
+        }
+
+        .signin-form a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signin-form a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Signin</h1>
-    <form method="post" action="{% url 'signin' %}">
-        {% csrf_token %}
-
-        <div>
+    <div class="signin-form">
+        <form method="post">
+            {% csrf_token %}
+            <h2>Signin</h2>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-        </div>
 
-        <div>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-        </div>
 
-        {% if error_message %}
-        <div style="color: red;">{{ error_message }}</div>
-        {% endif %}
+            <button type="submit">Signin</button>
+        </form>
 
-        <div>
-            <button type="submit">Sign in</button>
-        </div>
-    </form>
-
-    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Register</a></p>
+    </div>
 </body>
 </html>

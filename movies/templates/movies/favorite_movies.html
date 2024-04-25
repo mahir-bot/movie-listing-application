@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Favorite Movies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: box-shadow 0.3s;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .search-form {
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-icon {
+            padding-right: 10px;
+            color: #333;
+        }
+
+        .favorite-movies-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .favorite-movies-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: box-shadow 0.3s;
+        }
+
+        .favorite-movies-item:hover {
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .movie-thumbnail {
+            width: 50px;
+            height: 70px;
+            border-radius: 5px;
+        }
+
+        .movie-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h1>My Favorite Movies</h1>
+
+        <div class="search-bar">
+            <form class="search-form" method="GET" action="{% url 'search_favorites' %}">
+                <span class="search-icon">🔍</span>
+                <input type="text" name="q" placeholder="Search for a favorite movie..." class="search-input" value="{{ query }}">
+            </form>
+        </div>
+
+        <ul class="favorite-movies-list">
+            {% if favorite_movies.exists %}
+                {% for favorite in favorite_movies %}
+                    <li class="favorite-movies-item">
+                        <div class="movie-info">
+                            {% if favorite.movie.thumbnail %}
+                                <img src="{{ favorite.movie.thumbnail.url }}" alt="{{ favorite.movie.title }}" class="movie-thumbnail">
+                            {% else %}
+                                <span>No image available</span>
+                            {% endif %}
+                            <span class="movie-title">
+                                {% if favorite.movie.slug %}
+                                    <a href="{% url 'movie_detail' favorite.movie.slug %}">{{ favorite.movie.title }}</a>
+                                {% else %}
+                                    {{ favorite.movie.title }} (Slug not available)
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <form method="post" action="{% url 'delete_favorite_movie' favorite.movie.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No favorite movies found.</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>

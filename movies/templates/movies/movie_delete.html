@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Delete {{ movie.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            color: #333;
+        }
+        .confirmation-box {
+            display: inline-block; 
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #dc3545; 
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #c82333; 
+        }
+        a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #007bff; 
+            font-size: 1em;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        a:hover {
+            color: #0056b3; 
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+   
+    {% include 'navbar.html' %}
+
+    <div class="confirmation-box">
+        <h1>Are you sure you want to delete "{{ movie.title }}"?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'movie_detail' movie.slug %}">No, Go Back</a> 
+        </form>
+    </div>
+</body>
+</html>

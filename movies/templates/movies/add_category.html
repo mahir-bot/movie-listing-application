@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stylish Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: left; <!-- Left-aligned text for form -->
+        }
+
+        .form-container h1 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center; <!-- Center-align the heading -->
+        }
+
+        .form-group {
+            margin-bottom: 20px; <!-- Increased spacing between fields -->
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+            display: block; <!-- Ensure labels are block-level -->
+        }
+
+        .form-control {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            transition: all 0.3s;
+            width: 100%; <!-- Ensure form controls take full width -->
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%; <!-- Full-width submit button -->
+            text-align: center; <!-- Center-align the text -->
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="form-container">
+        <h1>Add Category Name</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button class="submit-btn" type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

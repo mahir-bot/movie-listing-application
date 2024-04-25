@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Movie - Movie App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"> 
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar .navbar-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .navbar .navbar-links a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        
+        .navbar .navbar-links a:hover {
+            background-color: #444;
+        }
+
+        .container {
+            max-width: 800px;  
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:hover,
+        .form-group select:hover,
+        .form-group textarea:hover {
+            border-color: #007bff;
+        }
+
+        form button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #218838;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .links a.add-category {
+            background-color: #ff7f50;
+        }
+
+        .links a.add-category:hover {
+            background-color: #e66340; 
+        }
+
+        .links a.add-cast {
+            background-color: #17a2b8; 
+        }
+
+        .links a.add-cast:hover {
+            background-color: #138f9e;
+        }
+
+        .links a.back-home {
+            background-color: #007bff; 
+        }
+
+        .links a.back-home:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %} 
+
+    <div class="container"> 
+        <h1>Add a New Movie</h1> 
+
+        <form method="post" enctype="multipart/form-data"> 
+            {% csrf_token %} 
+
+            <div class="form-group"> 
+                <label for="movie_name">Movie Name:</label>
+                <input type="text" name="title" id="movie_name"> 
+            </div>
+
+            <div class="form-group"> 
+                <label for="release_date">Release Date:</label>
+                <input type="date" name="release_date" id="release_date"> 
+            </div>
+
+            <div class="form-group">
+                <label for="budget">Budget:</label>
+                <input type="number" name="budget" id="budget"> 
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" name="category" multiple>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="casts">Casts:</label>
+                <select class="form-control" name="casts" multiple>
+                    {% for cast in casts %}
+                        <option value="{{ cast.id }}">{{ cast.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group"> 
+                <label for="thumbnail">Thumbnail:</label>
+                <input type="file" name="thumbnail" id="thumbnail"> 
+            </div>
+
+            <button type="submit"><i class="fas fa-plus"></i> Create Movie</button> 
+        </form>
+
+        <div class="links">
+            <a class="add-category" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a> 
+            <a class="add-cast" href="{% url 'add_cast' %}"><i class="fas fa-users"></i> Add Cast</a> 
+            <a class="back-home" href="{% url 'home' %}"><i class="fas fa-home"></i> Back to Home</a> 
+        </div>
+    </div>
+</body>
+</html>
