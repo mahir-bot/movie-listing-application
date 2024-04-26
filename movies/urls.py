@@ -14,7 +14,7 @@ urlpatterns = [
 
     # Movie-Related Operations
     path('movies/create/', views.create_movie, name='create_movie'),
-    path('movie/<slug:movie_slug>/', views.movie_details, name='movie_detail'),
+    path('movies/<slug:movie_slug>/', views.movie_details, name='movie_detail'),
     path('movies/<slug:movie_slug>/update/',
          views.update_movie, name='movie_update'),
     path('movies/<slug:movie_slug>/delete/',

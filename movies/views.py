@@ -187,9 +187,6 @@ def create_movie(request):
 
             print(movie)
             movie.save()
-
-            messages.success(request, "Movie created successfully!")
-
             return redirect(reverse("home"))
 
         else:
