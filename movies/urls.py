@@ -2,14 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # User Authentication and Profile
-    path('signup/', views.user_register, name='signup'),
-    path('signin/', views.user_login, name='signin'),
-    path('signout/', views.user_logout, name='signout'),
-    path('profile/', views.user_profile, name='user_profile'),
 
     # Home and Search
-    path('home/', views.home_page, name='home'),
+    path('', views.home_page, name='home'),
     path('search/', views.search_movies, name='search_movies'),
 
     # Movie-Related Operations

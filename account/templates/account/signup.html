@@ -23,7 +23,9 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 450px;
+            margin-top: 60px; /* Add margin to the top to create space below the navbar */
         }
+
 
         h2 {
             text-align: center;
@@ -90,6 +92,17 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .top-navbar {
+       position: fixed;
+         top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff; /* Add a background color */
+    z-index: 100; /* Ensure the navbar is above other content */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
+        }
+
     </style>
     <script>
         function validatePassword() {
@@ -105,6 +118,9 @@
     </script>
 </head>
 <body>
+    <div class="top-navbar">
+     {% include 'navbar.html' %}
+    </div>
     <div class="signup-form">
         <form method="post" onsubmit="return validatePassword()">
             {% csrf_token %}
