@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# Enable strict mode:
+# - errexit: Exit script when a command fails.
+# - pipefail: Ensure pipeline returns the exit status of the last command to exit with a non-zero status.
+# - nounset: Treat unset variables and parameters as an error.
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Check if POSTGRES_USER is unset or empty, and if so, set it to 'postgres' by default.
+if [ -z "${POSTGRES_USER}" ]; then
+    base_postgres_image_defualt_user='postgres'
+    export POSTGRES_USER="${base_postgres_image_defualt_user}"
+fi
+
+# Construct the DATABASE_URL environment variable required for the Django application.
+# Format: postgres://<user>:<password>@<host>:<port>/<database>
+export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+
+# Use Python to wait for the PostgreSQL server to become available.
+python << END
+import sys
+import time
+import psycopg2
+
+# Set the maximum wait time before suggesting a configuration issue.
+suggest_unreadable_after = 30
+start = time.time()
+
+while True:
+    try:
+        # Attempt to connect to the PostgreSQL database.
+        psycopg2.connect(
+            dbname="${POSTGRES_DB}",
+            user="${POSTGRES_USER}",
+            password="${POSTGRES_PASSWORD}",
+            host="${POSTGRES_HOST}",
+            port="${POSTGRES_PORT}",
+        )
+        # Break the loop if the connection is successful.
+        break
+    except psycopg2.OperationalError as error:
+        # Print a message to stderr if the connection fails.
+        sys.stderr.write("Waiting for Postgres to become available...\n")
+
+        # Check if the wait time has exceeded the threshold.
+        if time.time() - start > suggest_unreadable_after:
+            sys.stderr.write(
+                "Postgres is still not available after %d seconds. "
+                "Please check your configuration.\n" % suggest_unreadable_after
+            )
+    # Wait for 1 second before trying again.
+    time.sleep(1)
+END
+
+# Print a message to stderr indicating that PostgreSQL is available.
+>&2 echo "PostgresSQL is available"
+
+# Execute the command passed as arguments to this script.
+exec "$@"
+
+
+
+# ### Detailed Explanation:
+
+# 1. **Shebang (`#!/bin/bash`)**:
+#    - Specifies that the script should be run using the Bash shell.
+
+# 2. **Set Shell Options (`set -o ...`)**:
+#    - **errexit**: Exit the script immediately if any command exits with a non-zero status.
+#    - **pipefail**: If a command in a pipeline fails, the entire pipeline fails with that exit status.
+#    - **nounset**: Treat unset variables as an error and exit immediately.
+
+# 3. **Check `POSTGRES_USER` Variable**:
+#    - The `if` statement checks if the `POSTGRES_USER` environment variable is empty or unset.
+#    - If it is, it sets `POSTGRES_USER` to a default value ('postgres').
+
+# 4. **Construct `DATABASE_URL`**:
+#    - Constructs the `DATABASE_URL` environment variable using the PostgreSQL connection details.
+#    - This variable is typically used by web applications to connect to the database.
+
+# 5. **Inline Python Script**:
+#    - A Python script is embedded within the Bash script using a here-document (`<< END`).
+#    - This script continuously tries to connect to the PostgreSQL database until it is successful.
+
+#    - **Python Script Details**:
+#      - **Imports**: `sys` for standard input/output operations, `time` for handling delays, and `psycopg2` for PostgreSQL connection.
+#      - **Variables**:
+#        - `suggest_unreadable_after` sets the threshold (30 seconds) after which a configuration warning is suggested.
+#        - `start` records the start time.
+#      - **Loop**:
+#        - Attempts to connect to the PostgreSQL database using the provided credentials.
+#        - If the connection is successful, the loop breaks.
+#        - If the connection fails, it writes an error message to `stderr`.
+#        - If the connection has been failing for more than 30 seconds, it suggests checking the configuration.
+#        - Waits for 1 second before retrying the connection.
+
+# 6. **Print Success Message**:
+#    - Writes a message to `stderr` indicating that PostgreSQL is now available.
+
+# 7. **Execute Passed Command (`exec "$@"`)**:
+#    - Executes the command provided as arguments to the script.
+#    - `exec` replaces the current shell with the specified command, so the script's process ID remains the same.
