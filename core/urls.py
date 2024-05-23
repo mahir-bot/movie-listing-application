@@ -4,10 +4,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('movies.urls')),
-    path('account/', include('account.urls')),
-    path('dashboard/', include('dashboard.urls')),
+    path(settings.ADMIN_URL, admin.site.urls),
+    path('', include('core_apps.movies.urls')),
+    path('account/', include('core_apps.account.urls')),
+    path('dashboard/', include('core_apps.dashboard.urls')),
     # path('', include('django.contrib.auth.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()

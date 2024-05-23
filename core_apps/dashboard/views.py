@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from movies.models import FavoriteMovies
+from core_apps.movies.models import FavoriteMovies
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Create your views here.
