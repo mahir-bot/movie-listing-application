@@ -88,13 +88,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ROOT_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': ROOT_DIR / 'db.sqlite3',
+#     }
+# }
 
+DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # DATABASES = {
 #     'default': env.db('DATABASE_URL')
@@ -147,13 +149,13 @@ ADMIN_URL = 'supersecret/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = ROOT_DIR / 'static'
+STATIC_URL = '/staticfiles/'
+STATIC_ROOT = str(ROOT_DIR / 'staticfiles')
 # STATICFILES_DIRS = [
 #     ROOT_DIR / "static",
 # ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = ROOT_DIR / 'media'
+MEDIA_URL = '/mediafiles/'
+MEDIA_ROOT = str(ROOT_DIR / 'mediafiles')
 
 
 CORS_URLS_REGEX = r'^/api/.*$'

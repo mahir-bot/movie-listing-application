@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+
+working_dir="$(dirname ${0})"
+
+source "${working_dir}/_sourced/constants.sh"
+source "${working_dir}/_sourced/messages.sh"
+
+if [[ -z ${1+x} ]]; then
+    message_error "No backup file specified, please specify a backup file to restore."
+    exit 1
+fi
+
+
+backup_filename="${BACKUP_DIR_PATH}/${1}"
+
+if [[ ! -f "${backup_filename}" ]]; then
+    message_error "Backup file does not exist,
+    please specify a valid backup file to restore, or create a new one."
+    exit 1
+fi
+
+message_welcome "Restoring '${POSTGRES_DB}' database from '${backup_filename}'...."
+
+
+if [[ "${POSTGRES_USER}" == "postgres" ]]; then
+    message_error "The 'postgres' user cannot be used to restore the database,
+    assign 'POSTGRES_USER' env with another one and try again."
+    exit 1
+fi
+
+
+export PGHOST="${POSTGRES_HOST}"
+export PGPORT="${POSTGRES_PORT}"
+export PGUSER="${POSTGRES_USER}"
+export PGPASSWORD="${POSTGRES_PASSWORD}"
+export PGDATABASE="${POSTGRES_DB}"
+
+message_info "Dropping the database..."
+
+dropdb "${PGDATABASE}"
+
+message_info "Creating a new database..."
+
+createdb --owner="${POSTGRES_USER}"
+
+message_info "Applying the backup to the new database...."
+
+gunzip -c "${backup_filename}" | psql "${POSTGRES_DB}"
+
+message_success "Successfully restored '${POSTGRES_DB}' database from '${backup_filename}'."
