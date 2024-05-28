@@ -1,4 +1,4 @@
-# 🎬 Movie Listing Application
+# 🎬 Entertain Hub
 
 A simple movie listing application where users can register, search for movies, view movie details, add movies to favorites, and manage their personal favorites. This application aims to mimic basic functionalities similar to IMDb.
 
