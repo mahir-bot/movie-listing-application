@@ -5,7 +5,7 @@ services:
       dockerfile: ./docker/local/django/Dockerfile
     command: /start
     volumes:
-      - .:/app:z
+      - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
     expose:
@@ -16,6 +16,7 @@ services:
     depends_on:
       - postgres
       - mailhog
+      - redis
     networks:
       - movies-api
 
@@ -38,7 +39,49 @@ services:
       - "8025:8025"
     networks:
       - movies-api
-  
+
+  redis:
+    image: redis:7.2.5-alpine
+    container_name: redis
+    networks:
+      - movies-api
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celeryworker
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - movies-api
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-flower
+    container_name: flower
+    volumes:
+      - flower_data:/data
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - movies-api
+
   nginx:
     restart: always
     depends_on:
@@ -63,3 +106,4 @@ volumes:
   media_volume:
   local_postgres_data: {}
   local_postgres_data_backups: {}
+  flower_data: {}
