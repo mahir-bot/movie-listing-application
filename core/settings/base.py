@@ -3,6 +3,11 @@ from datetime import timedelta
 import environ
 env = environ.Env()
 
+# Load environment variables from .env file
+
+
+# Print the PostgreSQL database URL
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -93,6 +98,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #         'NAME': ROOT_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+# Print the PostgreSQL database URL
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 

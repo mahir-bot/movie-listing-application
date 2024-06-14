@@ -14,3 +14,6 @@ class CustomUserDetailsView(RetrieveUpdateAPIView):
 
     def get_queryset(self):
         return get_user_model().objects.none()
+    
+    
+    

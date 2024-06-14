@@ -59,10 +59,10 @@
             {% if user.is_authenticated %}
             <a href="{% url 'user_profile' %}"><i class="fas fa-user"></i> Profile</a>
             <a href="{% url 'favorite_movies' %}"><i class="fas fa-heart"></i> Favorite Movies</a>
-            <a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            {% else %}
-            <a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Register</a>
+            {% comment %} <a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a> {% endcomment %}
+            {% comment %} {% else %} {% endcomment %}
+            {% comment %} <a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Login</a> {% endcomment %}
+            {% comment %} <a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Register</a> {% endcomment %}
             {% endif %}
         </div>
     </nav>
