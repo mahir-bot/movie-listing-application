@@ -36,7 +36,7 @@ class Profile(TimeStampedModel):
     )
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        return f"{self.user.first_name}'s profile"
 
     def follow(self, profile):
         self.followers.add(profile)

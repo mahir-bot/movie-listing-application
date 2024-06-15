@@ -25,8 +25,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path(settings.ADMIN_URL, admin.site.urls),
-    # path('', include('core_apps.movies.urls')),
-    # path('users/', include('core_apps.users.urls')),
     
     path('api/v1/auth/', include('dj_rest_auth.urls')),
     path('api/v1/auth/user/', CustomUserDetailsView.as_view(), name='user_details'),
@@ -36,6 +34,8 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
+    
+    path('api/v1/profiles/', include('core_apps.profiles.urls')),
 ]
 
 
